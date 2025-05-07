@@ -1,0 +1,39 @@
+Assumptions and Environment Notes
+OpenSearch Setup
+
+The OpenSearch cluster is assumed to be running locally at http://localhost:9200.
+
+For simplicity, basic authentication is hardcoded as admin:xxxx. In a production environment, credentials should be stored securely using Jenkins credentials or environment variables.
+
+Output Behavior
+
+The script writes the monitor configuration JSON to output/monitors.json.
+
+The structure of the output matches what the business expects—each index gets a dedicated monitor with standard fields.
+
+Script Functionality
+
+The script fetches available indices from OpenSearch in real-time and generates monitor entries only for those currently present.
+
+It scans for the keyword "error" in the message field—this is currently hardcoded for all monitors.
+
+Notification channels are placeholders for now (notification_channel_1, notification_channel_2, etc.), and can be customized as needed.
+
+Jenkins Pipeline Expectations
+
+Assumes the Jenkins agent has Python 3 installed along with venv.
+
+The pipeline installs Python dependencies at runtime using pip, so internet access is required on the Jenkins agent.
+
+Extensibility & Future Enhancements
+
+At the moment, the solution supports OpenSearch only.
+
+Enhancements like adding filters for index patterns, custom log keywords, or multiple notification rules can be introduced by adjusting the Python function create_monitor_entry().
+
+Security Considerations
+
+The current implementation uses plain text credentials for simplicity.
+
+For real deployments, the use of Jenkins withCredentials or integration with a secret manager (e.g., Vault, AWS Secrets Manager) is recommended.
+
